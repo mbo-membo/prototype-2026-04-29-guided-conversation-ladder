@@ -3,99 +3,90 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Memrise · Guided Conversation Ladder</title>
+  <title>Memrise · Café conversation practice</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=guided-convo-ladder-1" />
+  <link rel="stylesheet" href="styles.css?v=guided-convo-ladder-2" />
 </head>
 <body>
   <main class="stage">
     <div class="phone-wrap">
       <div class="device-shadow"></div>
-      <section class="phone-shell" aria-label="Guided Conversation Ladder prototype">
+      <section class="phone-shell" aria-label="Memrise learner-facing prototype">
         <div class="phone-notch"></div>
         <div class="screen">
           <header class="statusbar"><span>9:41</span><div class="status-icons"><span>◔</span><span>◉</span><span>▰</span></div></header>
-          <header class="topbar">
+
+          <section class="appbar">
             <button class="icon-button" aria-label="Back">←</button>
-            <div class="topbar-copy"><p>French • Phrase to convo</p><strong>Guided ladder</strong></div>
-            <button class="icon-button" aria-label="More">⋯</button>
-          </header>
-
-          <section class="hero-card">
-            <div class="hero-copy">
-              <p class="eyebrow">Recommended UI</p>
-              <h1>Take one phrase into a tiny real conversation.</h1>
-              <p class="subcopy">This is the strongest way to test whether Memrise can bridge phrase familiarity into realistic conversational retrieval.</p>
+            <div class="appbar-copy">
+              <p>French</p>
+              <strong>Café conversation</strong>
             </div>
-            <div class="readiness-ring"><div><strong>3</strong><span>short turns</span></div></div>
+            <button class="icon-button ghost" aria-label="Close">✕</button>
           </section>
 
-          <section class="summary-card">
-            <div class="summary-header">
-              <div><p class="eyebrow soft">Why this matters</p><h2>Users want language to come out naturally, not stay trapped in drills.</h2></div>
-              <span class="badge warn">Transfer test</span>
+          <section class="progress-card">
+            <div class="progress-copy">
+              <p class="eyebrow">Conversation practice</p>
+              <h1 id="screenTitle">Café conversation</h1>
+              <p id="screenSubtitle">Answer naturally in 3 short turns.</p>
             </div>
-            <div class="score-list">
-              <div class="score-row"><div class="score-labels"><span>Phrase familiarity</span><strong>Strong</strong></div><div class="meter"><i style="width:88%"></i></div></div>
-              <div class="score-row"><div class="score-labels"><span>Real-life retrieval</span><strong>Weaker</strong></div><div class="meter purple"><i style="width:54%"></i></div></div>
-            </div>
+            <div class="progress-pill"><strong id="stepLabel">1/3</strong><span id="stepMeta">guided</span></div>
           </section>
 
-          <section class="practice-card">
-            <div class="section-head stacked">
-              <div><p class="eyebrow soft">Guided conversation ladder</p><h3>Turn 1 easy → Turn 2 supported → Turn 3 freer</h3></div>
-              <p class="helper helper-left">Mostly familiar language, one small stretch.</p>
+          <section class="scene-card">
+            <div class="scene-head">
+              <span class="scene-tag">Paris café</span>
+              <span class="scene-tag soft" id="hintLevel">Guided</span>
+            </div>
+            <p class="scene-text" id="sceneText">You're ordering at a café. Keep it short and natural.</p>
+          </section>
+
+          <section class="chat-card">
+            <div class="chat-bubble other">
+              <span class="speaker">Waiter</span>
+              <p id="waiterLine">Bonjour ! Vous voulez commander ?</p>
             </div>
 
-            <article class="coach-card">
-              <div class="coach-head"><span class="pill active" id="turnBadge">Turn 1</span><span class="tiny-meta" id="turnMeta">Heavily scaffolded</span></div>
-              <strong id="turnPrompt">The waiter asks what you’d like. Start with: “Je voudrais…”</strong>
-              <p id="turnCopy">The first turn is nearly impossible to fail. It proves the learner can pull a familiar phrase into context.</p>
-              <div class="button-row">
-                <button id="nextTurnBtn" class="mini-btn record">Next turn</button>
-                <button class="mini-btn">Show starter</button>
+            <div class="coach-strip" id="coachStrip">
+              <span class="coach-label">Starter</span>
+              <p id="coachText">Begin with: <strong>Je voudrais…</strong></p>
+            </div>
+
+            <div class="reply-panel">
+              <p class="reply-label">Your reply</p>
+              <div class="reply-box" id="replyBox">Je voudrais un café, s'il vous plaît.</div>
+              <div class="chip-row" id="chipRow">
+                <button class="chip active">Je voudrais…</button>
+                <button class="chip">un café</button>
+                <button class="chip">s'il vous plaît</button>
               </div>
-            </article>
-
-            <article class="scenario-card">
-              <div class="scenario-copy">
-                <p class="eyebrow soft">Wrap-up state</p>
-                <h4 id="wrapHeader">From phrase to conversation</h4>
-                <p id="wrapBody">After 3 short turns, show that the learner moved from repetition into actual conversational retrieval.</p>
+              <div class="input-actions">
+                <button class="mini-btn">Type</button>
+                <button class="mini-btn record">Speak</button>
               </div>
-              <button id="peekBtn" class="peek-btn" aria-expanded="false">Show example stretch</button>
-              <div id="peekPanel" class="peek-panel hidden">
-                <p><strong>Stretch example:</strong> after ordering, the waiter asks <em>“Et pour boire ?”</em> so the learner has to adapt with one extra choice.</p>
-              </div>
-            </article>
-          </section>
-
-          <section class="focus-card">
-            <div class="section-head">
-              <div><p class="eyebrow soft">Key tradeoff</p><h3>Better transfer signal, heavier than a normal card</h3></div>
-              <p class="helper">Worth it if it improves real use.</p>
-            </div>
-            <div class="word-list">
-              <article class="word-item"><div><strong>Strength</strong><p>Best test of whether learners can move from known phrases into low-stakes realistic speaking.</p></div><span class="tag">Best test</span></article>
-              <article class="word-item"><div><strong>Risk</strong><p>If the tone feels too exercise-like, it could feel heavier or mildly test-like.</p></div><span class="tag danger">Tone risk</span></article>
             </div>
           </section>
 
-          <section class="actions-card">
-            <button class="cta secondary">Fast fallback: Tiny Turn Check-in</button>
-            <button class="cta primary">Recommended: Guided Conversation Ladder</button>
+          <section class="feedback-card" id="feedbackCard">
+            <div>
+              <p class="eyebrow soft">Nice</p>
+              <h2 id="feedbackTitle">That sounds natural.</h2>
+              <p id="feedbackBody">You used a phrase you already know in a real situation.</p>
+            </div>
+            <span class="feedback-badge" id="feedbackBadge">Clear start</span>
+          </section>
+
+          <section class="footer-actions">
+            <button class="cta secondary" id="secondaryBtn">See translation</button>
+            <button class="cta primary" id="primaryBtn">Next turn</button>
           </section>
         </div>
       </section>
     </div>
-
-    <section class="caption-panel">
-      <p class="caption-kicker">Prototype rationale</p>
-      <p class="caption-text">This concept stays compact but finally tests the missing step: can Memrise help phrases come out in a realistic moment, not just on a flashcard-like prompt?</p>
-    </section>
   </main>
-  <script src="app.js?v=guided-convo-ladder-1"></script>
+  <script src="app.js?v=guided-convo-ladder-2"></script>
 </body>
 </html>

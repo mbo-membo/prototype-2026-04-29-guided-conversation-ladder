@@ -1,60 +1,98 @@
-const nextTurnBtn = document.getElementById('nextTurnBtn');
-const turnBadge = document.getElementById('turnBadge');
-const turnMeta = document.getElementById('turnMeta');
-const turnPrompt = document.getElementById('turnPrompt');
-const turnCopy = document.getElementById('turnCopy');
-const wrapHeader = document.getElementById('wrapHeader');
-const wrapBody = document.getElementById('wrapBody');
-const peekBtn = document.getElementById('peekBtn');
-const peekPanel = document.getElementById('peekPanel');
-
-const turns = [
+const states = [
   {
-    badge: 'Turn 1',
-    meta: 'Heavily scaffolded',
-    prompt: 'The waiter asks what you’d like. Start with: “Je voudrais…”',
-    copy: 'The first turn is nearly impossible to fail. It proves the learner can pull a familiar phrase into context.',
-    wrapHeader: 'From phrase to conversation',
-    wrapBody: 'After 3 short turns, show that the learner moved from repetition into actual conversational retrieval.'
+    stepLabel: '1/3',
+    stepMeta: 'warm-up',
+    title: 'Café conversation',
+    subtitle: 'Answer naturally in 3 short turns.',
+    hintLevel: 'Guided',
+    sceneText: "You're ordering at a café. Keep it short and natural.",
+    waiterLine: 'Bonjour ! Vous voulez commander ?',
+    coachText: 'Begin with: <strong>Je voudrais…</strong>',
+    reply: "Je voudrais un café, s'il vous plaît.",
+    chips: ['Je voudrais…', 'un café', "s'il vous plaît"],
+    feedbackTitle: 'That sounds natural.',
+    feedbackBody: 'You used a phrase you already know in a real situation.',
+    feedbackBadge: 'Clear start',
+    primary: 'Next turn',
+    secondary: 'See translation'
   },
   {
-    badge: 'Turn 2',
-    meta: 'Partially prompted',
-    prompt: 'Now add one detail: what drink would you like with it?',
-    copy: 'The second turn uses mostly familiar language but introduces one small stretch so the learner adapts, not just repeats.',
-    wrapHeader: 'Middle rung',
-    wrapBody: 'This is where the prototype earns its keep: not pure recall, not full freestyle — a realistic middle step.'
+    stepLabel: '2/3',
+    stepMeta: 'stretch',
+    title: 'Add one small detail',
+    subtitle: 'The waiter asks a follow-up. Adapt your answer.',
+    hintLevel: 'Less guided',
+    sceneText: 'Same café, but now you need to respond with a drink too.',
+    waiterLine: 'Et pour boire ?',
+    coachText: 'Use your café phrase, then add a drink.',
+    reply: "Un café et une eau, s'il vous plaît.",
+    chips: ['un café', 'et une eau', "s'il vous plaît"],
+    feedbackTitle: 'Nice adjustment.',
+    feedbackBody: 'You handled a follow-up without leaving the conversation.',
+    feedbackBadge: 'Small stretch',
+    primary: 'Final turn',
+    secondary: 'Need a hint?'
   },
   {
-    badge: 'Turn 3',
-    meta: 'Freer final turn',
-    prompt: 'The waiter didn’t hear you. Say the whole request again naturally.',
-    copy: 'The third turn is freer. The learner now has to retrieve the phrase in a lightly pressured but still safe context.',
-    wrapHeader: 'End state',
-    wrapBody: 'Close with a small progress message like “You just used your café phrases in a mini conversation.”'
+    stepLabel: '3/3',
+    stepMeta: 'freer',
+    title: 'One more time',
+    subtitle: 'Less support now. Just answer naturally.',
+    hintLevel: 'Almost free',
+    sceneText: 'The waiter did not catch it. Say the whole request again.',
+    waiterLine: 'Pardon ?',
+    coachText: 'No starter this time — just answer naturally.',
+    reply: "Je voudrais un café et une eau, s'il vous plaît.",
+    chips: ['Je voudrais', 'un café', 'une eau'],
+    feedbackTitle: 'You just did a real mini conversation.',
+    feedbackBody: 'That was not a drill anymore — you retrieved the language in context.',
+    feedbackBadge: 'Conversation done',
+    primary: 'Try another one',
+    secondary: 'Review phrases'
   }
 ];
 
-let idx = 0;
-if (nextTurnBtn) {
-  nextTurnBtn.addEventListener('click', () => {
-    idx = (idx + 1) % turns.length;
-    const turn = turns[idx];
-    turnBadge.textContent = turn.badge;
-    turnMeta.textContent = turn.meta;
-    turnPrompt.textContent = turn.prompt;
-    turnCopy.textContent = turn.copy;
-    wrapHeader.textContent = turn.wrapHeader;
-    wrapBody.textContent = turn.wrapBody;
-    nextTurnBtn.textContent = idx === turns.length - 1 ? 'Reset turns' : 'Next turn';
-    if (idx === 0) nextTurnBtn.textContent = 'Next turn';
-  });
+const els = {
+  stepLabel: document.getElementById('stepLabel'),
+  stepMeta: document.getElementById('stepMeta'),
+  screenTitle: document.getElementById('screenTitle'),
+  screenSubtitle: document.getElementById('screenSubtitle'),
+  hintLevel: document.getElementById('hintLevel'),
+  sceneText: document.getElementById('sceneText'),
+  waiterLine: document.getElementById('waiterLine'),
+  coachText: document.getElementById('coachText'),
+  replyBox: document.getElementById('replyBox'),
+  chipRow: document.getElementById('chipRow'),
+  feedbackTitle: document.getElementById('feedbackTitle'),
+  feedbackBody: document.getElementById('feedbackBody'),
+  feedbackBadge: document.getElementById('feedbackBadge'),
+  primaryBtn: document.getElementById('primaryBtn'),
+  secondaryBtn: document.getElementById('secondaryBtn')
+};
+
+let index = 0;
+
+function render(state) {
+  els.stepLabel.textContent = state.stepLabel;
+  els.stepMeta.textContent = state.stepMeta;
+  els.screenTitle.textContent = state.title;
+  els.screenSubtitle.textContent = state.subtitle;
+  els.hintLevel.textContent = state.hintLevel;
+  els.sceneText.textContent = state.sceneText;
+  els.waiterLine.textContent = state.waiterLine;
+  els.coachText.innerHTML = state.coachText;
+  els.replyBox.textContent = state.reply;
+  els.feedbackTitle.textContent = state.feedbackTitle;
+  els.feedbackBody.textContent = state.feedbackBody;
+  els.feedbackBadge.textContent = state.feedbackBadge;
+  els.primaryBtn.textContent = state.primary;
+  els.secondaryBtn.textContent = state.secondary;
+  els.chipRow.innerHTML = state.chips.map((chip, i) => `<button class="chip${i === 0 ? ' active' : ''}">${chip}</button>`).join('');
 }
 
-if (peekBtn && peekPanel) {
-  peekBtn.addEventListener('click', () => {
-    const hidden = peekPanel.classList.toggle('hidden');
-    peekBtn.setAttribute('aria-expanded', String(!hidden));
-    peekBtn.textContent = hidden ? 'Show example stretch' : 'Hide example stretch';
-  });
-}
+els.primaryBtn?.addEventListener('click', () => {
+  index = (index + 1) % states.length;
+  render(states[index]);
+});
+
+render(states[index]);
